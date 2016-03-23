@@ -1,0 +1,11 @@
+Explanation of files:
+
+The .ipynb files in this archive are iPython notebook files which contain scripts to analyze the model and plot results. To use these files, you will need to have python, and the ipython notebook installed on your computer. 
+
+The corresponding .html files are the visual front-ends to the ipython notebooks, and can be used to view the analysis without running it. 
+
+- “Three Stream Exploration” runs the model through the various individual conditions described in the paper, and generates plots.
+
+- “Three Stream Analysis - Policy groups” evaluates the impact of various policies on a toy population
+
+- “Three Stream Analysis - Policy groups - Better Population Model” reruns the various policies on a population constructed according to parameter distributions derived from our interviews.

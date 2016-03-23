@@ -1,0 +1,875 @@
+{UTF-8}
+Effort Devoted to Tier 2 Leads=
+	MIN(Effort Remaining after Servicing Tier 3 Leads, Effort Required to Make a Sale * \
+		Tier 2 Leads / Minimum Time to Make a Sale )
+	~	Hours/Month
+	~	This is the amount of time the agent spends with a tier 2 lead in a given \
+		year, working to make a sale.
+	|
+
+Effort Devoted to Tier 3 Leads=
+	MIN(Effort Remaining after Servicing Existing Clients, Effort Required to Make a Sale\
+		 * Tier 3 Leads / Minimum Time to Make a Sale)
+	~	Hours/Month
+	~	This is the amount of time the agent spends with a tier 1 lead in a given \
+		year, working to make a sale.
+	|
+
+Qualification Rate=
+	1
+	~	Persons/Referral
+	~	What is the likelihood that a lead will be worth pursuing? Some leads \
+		might not be worth your effort. According to interviewees, leads that are \
+		properly solicited and introduced are almost always worth following up \
+		with.
+	|
+
+Tier 1 Lead Aquisition=
+	Qualification Rate * (Tier 1 Referrals + Tier 1 Referrals from Tier 2)
+	~	Persons/Month
+	~	How many new tier 1 leads does an agent net?
+	|
+
+Tier 2 Lead Aquisition=
+	Qualification Rate * (Tier 2 Referrals + Tier 2 Referrals from Tier 1 + Tier 2 Referrals from Tier 3\
+		)
+	~	Persons/Month
+	~	How many new tier 2 leads does an agent net?
+	|
+
+Tier 3 Lead Aquisition=
+	Qualification Rate * (Tier 3 Referrals + Tier 3 Referrals from Tier 2)
+	~	Persons/Month
+	~	How many new tier 3 leads does an agent net?
+	|
+
+Success Rate=
+	0.2
+	~	Dmnl
+	~	What is the likelihood that a given lead will become a client, if the \
+		agent devotes the appropriate amount of attention to them?
+	|
+
+Tier 1 Sales=
+	Success Rate*MIN(Effort Devoted to Tier 1 Leads / Effort Required to Make a Sale, Tier 1 Leads\
+		/Minimum Time to Make a Sale)
+	~	Persons/Month
+	~	The rate at which Tier 1 leads become clients. This is limited either by \
+		the effort of the agent, or the natural calendar time required to make a \
+		sale.
+	|
+
+Tier 3 Sales=
+	Success Rate * MIN(Effort Devoted to Tier 3 Leads / Effort Required to Make a Sale, \
+		Tier 3 Leads/Minimum Time to Make a Sale)
+	~	Persons/Month
+	~	The rate at which Tier 3 leads become clients. This is limited either by \
+		the effort of the agent, or the natural calendar time required to make a \
+		sale.
+	|
+
+Tier 2 Sales=
+	Success Rate*MIN(Effort Devoted to Tier 2 Leads / Effort Required to Make a Sale, Tier 2 Leads\
+		/Minimum Time to Make a Sale)
+	~	Persons/Month
+	~	The rate at which Tier 2 leads become clients. This is limited either by \
+		the effort of the agent, or the natural calendar time required to make a \
+		sale.
+	|
+
+Still Employed=
+	IF THEN ELSE(Months of Buffer < 0 , 0 , 1 )
+	~	Dmnl
+	~	Flag for whether the agent is still with the firm. Goes to zero when the \
+		buffer becomes negative.
+	|
+
+Income=
+	Tier 1 Income + Tier 2 Income + Tier 3 Income + IF THEN ELSE(Time < Startup Subsidy Length\
+		, Startup Subsidy , 0 )
+	~	Months/Month
+	~	The total income from commissions on sales to all tiers.
+	|
+
+Effort Devoted to Tier 1 Clients=
+	Tier 1 Clients * Time per Client Meeting * Frequency of Meetings
+	~	Hours/Month
+	~	How much time does the agent devote to meetings for maintenance and \
+		soliciting referrals from Tier 1 Clients.
+	|
+
+Tier 1 Income=
+	Tier 1 Sales * Months of Expenses per Tier 1 Sale
+	~	Months/Month
+	~	This is the amount of money an agent makes from all commissions on Tier 1 \
+		Sales
+	|
+
+Effort Devoted to Tier 2 Clients=
+	Tier 2 Clients * Time per Client Meeting * Frequency of Meetings
+	~	Hours/Month
+	~	How much time does the agent devote to meetings for maintenance and \
+		soliciting referrals from Tier 2 Clients.
+	|
+
+Effort Devoted to Tier 3 Clients=
+	Tier 3 Clients * Frequency of Meetings * Time per Client Meeting
+	~	Hours/Month
+	~	How much time does the agent devote to meetings for maintenance and \
+		soliciting referrals from Tier 3 Clients.
+	|
+
+Effort Remaining after Servicing Existing Clients=
+	MAX(Sales Effort Available - (Effort Devoted to Tier 1 Clients + Effort Devoted to Tier 2 Clients\
+		 + Effort Devoted to Tier 3 Clients), 0)
+	~	Hours/Month
+	~	How much effort remains after higher priority sales and maintenance \
+		activities are complete?
+	|
+
+Effort Remaining after Servicing Tier 2 Leads=
+	MAX(Effort Remaining after Servicing Tier 3 Leads - Effort Devoted to Tier 2 Leads, \
+		0)
+	~	Hours/Month
+	~	How much effort remains after higher priority sales and maintenance \
+		activities are complete?
+	|
+
+Effort Remaining after Servicing Tier 3 Leads=
+	MAX(Effort Remaining after Servicing Existing Clients - Effort Devoted to Tier 3 Leads\
+		, 0)
+	~	Hours/Month
+	~	How much effort remains after higher priority sales and maintenance \
+		activities are complete?
+	|
+
+Fraction of Effort for Sales=
+	0.25
+	~	Dmnl
+	~	Of all the effort devoted to work, what fraction is actually spent doing \
+		sales and maintenance activities? This includes time spent with existing \
+		clients soliciting referrals.
+	|
+
+Expenses=
+	1
+	~	Months/Month
+	~	How many months of expenses are expended per month. This is a bit of a \
+		tautology, but its the right way to account for the agents income and \
+		spending while preserving their privacy.
+	|
+
+Sales Effort Available=
+	Fraction of Effort for Sales * Total Effort Available * Still Employed
+	~	Hours/Month
+	~	How much total time per month can an agent actually spend in sales or \
+		maintenance meetings?
+	|
+
+Initial Buffer=
+	6
+	~	Months
+	~	How long can the agent afford to go with zero income? This could be months \
+		of expenses in the bank, or months of 'rent equivalent' they are able to \
+		borrow from family, etc.
+	|
+
+Startup Subsidy Length=
+	3
+	~	Months
+	~	How long does a sales agent recieve a subsidy for, before it is cut off?
+	|
+
+Total Effort Available=
+	200
+	~	Hours/Month
+	~	This is the total number of hours the agent is willing to work in a month.
+	|
+
+Months of Buffer= INTEG (
+	Income-Expenses,
+		Initial Buffer)
+	~	Months
+	~	This is the stock at any given time of the money in the bank, or remaining \
+		familial goodwill, etc.
+	|
+
+Months of Expenses per Tier 1 Sale=
+	12/500
+	~	Months/Person
+	~	Income from commission for a sale to a tier 1 lead. Measured in units of \
+		months of expenses, to preserve agents privacy.
+	|
+
+Months of Expenses per Tier 2 Sale=
+	12/50
+	~	Months/Person
+	~	Income from commission for a sale to a tier 2 lead. Measured in units of \
+		months of expenses, to preserve agents privacy.
+	|
+
+Months of Expenses per Tier 3 Sale=
+	12/5
+	~	Months/Person
+	~	Income from commission for a sale to a tier 3 lead. Measured in units of \
+		months of expenses, to preserve agents privacy.
+	|
+
+Tier 3 Income=
+	Months of Expenses per Tier 3 Sale * Tier 3 Sales
+	~	Months/Month
+	~	This is the amount of money an agent makes from all commissions on Tier 3 \
+		Sales
+	|
+
+Tier 2 Income=
+	Months of Expenses per Tier 2 Sale * Tier 2 Sales
+	~	Months/Month
+	~	This is the amount of money an agent makes from all commissions on Tier 2 \
+		Sales
+	|
+
+Startup Subsidy=
+	0.75
+	~	Months/Month [0,1,0.1]
+	~	How much does an agent recieve each month from his sales manager to help \
+		defer his expenses, in units of months of expenses?
+	|
+
+Time per Client Meeting=
+	1
+	~	Hours/Meeting
+	~	This is the number of hours an agent spends with a client, maintaining the \
+		relationship/accounts, and soliciting referrals, in one sitting.
+	|
+
+Client Lifetime=
+	120
+	~	Months
+	~	How long, on average, does a client remain with an agent?
+	|
+
+Down referral fraction=
+	0.2
+	~	Dmnl
+	~	What is the likelihood that a referral from a second or third tier client \
+		will be to the tier below them?
+	|
+
+Effort Devoted to Tier 1 Leads=
+	Effort Remaining after Servicing Tier 2 Leads
+	~	Hours/Month
+	~	This is the amount of time the agent spends with a tier 1 lead in a given \
+		year, working to make a sale.
+	|
+
+Tier 2 Referrals from Tier 3=
+	Referrals from Tier 3 Clients * Down referral fraction
+	~	Referrals/Month
+	~	This is the number of Tier 2 leads that are aquired through referrals from \
+		tier 3.
+	|
+
+Flat referral fraction=
+	1 - Down referral fraction - Up referral fraction
+	~	Dmnl
+	~	What is the likelihood that a referral from a client will be to a lead in \
+		their same tier?
+	|
+
+Frequency of Meetings=
+	1/12
+	~	Meetings/Month/Person
+	~	How many maintenance meetings does the agent have with each client in a \
+		month?
+	|
+
+Lead Shelf Life=
+	3
+	~	Months
+	~	After a certain amount of time, leads go stale. It gets awkward to keep \
+		interacting with them, and you're better off moving on. How long is that?
+	|
+
+Referrals from Tier 1 Clients=
+	Tier 1 Clients * Frequency of Meetings * Referrals per meeting
+	~	Referrals/Month
+	~	The number of referrals coming in from maintenance meetings with tier 1 \
+		clients.
+	|
+
+Referrals from Tier 2 Clients=
+	Tier 2 Clients * Referrals per meeting * Frequency of Meetings
+	~	Referrals/Month
+	~	The number of referrals coming in from maintenance meetings with tier 2 \
+		clients.
+	|
+
+Referrals from Tier 3 Clients=
+	Tier 3 Clients * Frequency of Meetings * Referrals per meeting
+	~	Referrals/Month
+	~	The number of referrals coming in from maintenance meetings with tier 3 \
+		clients.
+	|
+
+Referrals per meeting=
+	2
+	~	Referrals/Meeting
+	~	How many referrals can an agent comfortably gather from his clients in a \
+		given maintenance meeting?
+	|
+
+Tier 1 Client Turnover=
+	Tier 1 Clients/Client Lifetime
+	~	Persons/Month
+	~	This is the flow of tier 1 clients leaving the practice.
+	|
+
+Up referral fraction=
+	0.15
+	~	Dmnl
+	~	The likelihood that a referral from a tier 1 or tier 2 client will be to a \
+		lead of the tier above them.
+	|
+
+Tier 1 Leads Going Stale=
+	Tier 1 Leads/Lead Shelf Life
+	~	Persons/Month
+	~	These are tier 1 leads that grow old before they are sold, and are unable \
+		to be followed up on.
+	|
+
+Tier 1 Referrals=
+	Referrals from Tier 1 Clients * (1-Up referral fraction)
+	~	Referrals/Month
+	~	This is the number of Tier 1 leads that are aquired through referrals from \
+		any tier client.
+	|
+
+Tier 1 Referrals from Tier 2=
+	Referrals from Tier 2 Clients * Down referral fraction
+	~	Referrals/Month
+	~	This is the number of Tier 1 leads that are aquired through referrals from \
+		tier 2.
+	|
+
+Tier 2 Client Turnover=
+	Tier 2 Clients/Client Lifetime
+	~	Persons/Month
+	~	This is the flow of Tier 2 clients leaving the practice.
+	|
+
+Tier 2 Clients= INTEG (
+	Tier 2 Sales-Tier 2 Client Turnover,
+		0)
+	~	Persons
+	~	These are active clients who provide a regular level of return to the \
+		company.
+	|
+
+Tier 2 Leads= INTEG (
+	Tier 2 Lead Aquisition+Tier 2 Sales-Tier 2 Leads Going Stale,
+		0)
+	~	Persons
+	~	These are individuals who have been identified as targets and are somewhere in the \
+		sales process, before a sale has been made. 
+		They may or may not have been contacted by the agent yet. If they can be \
+		converted to clients, they will have a regular level of return for the \
+		company.
+	|
+
+Tier 2 Leads Going Stale=
+	Tier 2 Leads/Lead Shelf Life
+	~	Persons/Month
+	~	These are tier 2 leads that grow old before they are sold, and are unable \
+		to be followed up on.
+	|
+
+Tier 2 Referrals=
+	Referrals from Tier 2 Clients * Flat referral fraction
+	~	Referrals/Month
+	~	This is the number of Tier 2 leads that are aquired through referrals from \
+		any tier client.
+	|
+
+Tier 2 Referrals from Tier 1=
+	Referrals from Tier 1 Clients * Up referral fraction
+	~	Referrals/Month
+	~	This is the number of Tier 2 leads that are aquired through referrals from \
+		tier 1.
+	|
+
+Tier 3 Leads Going Stale=
+	Tier 3 Leads/Lead Shelf Life
+	~	Persons/Month
+	~	These are tier 3 leads that grow old before they are sold, and are unable \
+		to be followed up on.
+	|
+
+Tier 3 Client Turnover=
+	Tier 3 Clients/Client Lifetime
+	~	Persons/Month
+	~	This is the flow of regular clients leaving the practice.
+	|
+
+Tier 3 Clients= INTEG (
+	Tier 3 Sales-Tier 3 Client Turnover,
+		0)
+	~	Persons
+	~	These are active clients who provide a regular level of return to the \
+		company.
+	|
+
+Tier 3 Referrals=
+	Referrals from Tier 3 Clients * (1- Down referral fraction)
+	~	Referrals/Month
+	~	This is the number of Tier 3 leads that are aquired through referrals from \
+		any tier client.
+	|
+
+Tier 3 Leads= INTEG (
+	Tier 3 Lead Aquisition+Tier 3 Sales-Tier 3 Leads Going Stale,
+		0)
+	~	Persons
+	~	These are individuals who have been identified as targets and are somewhere in the \
+		sales process, before a sale has been made. 
+		They may or may not have been contacted by the agent yet. If they can be \
+		converted to clients, they will have a regular level of return for the \
+		company.
+	|
+
+Tier 3 Referrals from Tier 2=
+	Referrals from Tier 2 Clients * Up referral fraction
+	~	Referrals/Month
+	~	This is the number of Tier 3 leads that are aquired through referrals from \
+		tier 2.
+	|
+
+Effort Required to Make a Sale=
+	4
+	~	Hours/Person [0,50]
+	~	This is the amount of time the agent must spend (on average) with a lead \
+		(high or low value, for now) to make a sale.
+	|
+
+Minimum Time to Make a Sale=
+	1
+	~	Months
+	~	What is the absolute minimum calendar time it would take to make a sale to \
+		a person, even if you had all the hours in the day to devote to them?
+	|
+
+Tier 1 Leads= INTEG (
+	Tier 1 Lead Aquisition+Tier 1 Sales-Tier 1 Leads Going Stale,
+		100)
+	~	Persons
+	~	These are individuals who have been identified as targets and are somewhere in the \
+		sales process, before a sale has been made. 
+		They may or may not have been contacted by the agent yet. If they can be converted \
+		to clients, they will have a regular level of return for the company.
+		
+		We initialize to 100 because agents begin their sales careers with a list \
+		of 200 friends and family, about 50% of whom they might contact.
+	|
+
+Tier 1 Clients= INTEG (
+	Tier 1 Sales-Tier 1 Client Turnover,
+		0)
+	~	Persons
+	~	These are active clients who provide a regular level of return to the \
+		company.
+	|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 120
+	~	Month
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Month
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Month [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.0625
+	~	Month [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Leads and Clients
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|72,72,5,0
+10,1,Tier 1 Leads,510,716,51,22,3,131,0,0,0,0,0,0
+10,2,Tier 1 Clients,761,716,52,23,3,131,0,0,0,0,0,0
+1,3,5,2,4,0,0,22,0,0,0,-1--1--1,,1|(675,716)|
+1,4,5,1,100,0,0,22,0,0,0,-1--1--1,,1|(595,716)|
+11,5,812,636,716,6,8,34,3,0,0,1,0,0,0
+10,6,Tier 1 Sales,636,732,31,8,40,3,0,0,-1,0,0,0
+12,7,48,335,716,10,8,0,3,0,0,-1,0,0,0
+1,8,10,1,4,0,0,22,0,0,0,-1--1--1,,1|(428,717)|
+1,9,10,7,100,0,0,22,0,0,0,-1--1--1,,1|(365,717)|
+11,10,48,391,717,6,8,34,3,0,0,1,0,0,0
+10,11,Tier 1 Lead Aquisition,391,733,57,8,40,3,0,0,-1,0,0,0
+12,12,48,938,716,10,8,0,3,0,0,-1,0,0,0
+1,13,15,12,4,0,0,22,0,0,0,-1--1--1,,1|(902,716)|
+1,14,15,2,100,0,0,22,0,0,0,-1--1--1,,1|(839,716)|
+11,15,48,871,716,6,8,34,3,0,0,1,0,0,0
+10,16,Tier 1 Client Turnover,871,732,56,8,40,3,0,0,-1,0,0,0
+10,17,Tier 1 Referrals,483,664,40,8,8,3,0,0,0,0,0,0
+1,18,17,10,1,0,0,0,0,64,0,-1--1--1,,1|(423,682)|
+1,19,1,6,1,0,0,0,0,64,0,-1--1--1,,1|(565,750)|
+1,20,2,16,1,0,0,0,0,64,0,-1--1--1,,1|(834,757)|
+10,21,Referrals from Tier 1 Clients,692,644,49,14,8,3,0,0,0,0,0,0
+1,22,21,17,0,0,0,0,0,64,0,-1--1--1,,1|(589,653)|
+1,23,2,21,1,0,0,0,0,64,0,-1--1--1,,1|(738,665)|
+10,24,Effort Required to Make a Sale,1241,447,48,27,8,131,0,0,0,0,0,0
+10,25,Minimum Time to Make a Sale,1089,442,56,19,8,3,0,0,0,0,0,0
+12,26,48,511,818,10,8,0,3,0,0,-1,0,0,0
+1,27,29,26,4,0,0,22,0,0,0,-1--1--1,,1|(510,797)|
+1,28,29,1,100,0,0,22,0,0,0,-1--1--1,,1|(510,755)|
+11,29,48,510,778,8,6,33,3,0,0,2,0,0,0
+10,30,Tier 1 Leads Going Stale,470,778,32,14,40,3,0,0,-1,0,0,0
+1,31,1,29,1,0,0,0,0,64,0,-1--1--1,,1|(529,749)|
+10,32,Frequency of Meetings,1089,581,42,14,8,131,0,0,0,0,0,0
+10,33,Referrals per meeting,1089,514,42,18,8,131,0,0,0,0,0,0
+10,34,Tier 2 Leads,513,464,51,22,3,131,0,0,0,0,0,0
+10,35,Tier 2 Clients,764,464,52,23,3,131,0,0,0,0,0,0
+1,36,38,35,4,0,0,22,0,0,0,-1--1--1,,1|(678,464)|
+1,37,38,34,100,0,0,22,0,0,0,-1--1--1,,1|(598,464)|
+11,38,892,639,464,6,8,34,3,0,0,1,0,0,0
+10,39,Tier 2 Sales,639,480,31,8,40,3,0,0,-1,0,0,0
+12,40,48,355,465,10,8,0,3,0,0,-1,0,0,0
+1,41,43,34,4,0,0,22,0,0,0,-1--1--1,,1|(435,465)|
+1,42,43,40,100,0,0,22,0,0,0,-1--1--1,,1|(380,465)|
+11,43,48,402,465,6,8,34,3,0,0,1,0,0,0
+10,44,Tier 2 Lead Aquisition,402,481,57,8,40,3,0,0,-1,0,0,0
+12,45,48,941,464,10,8,0,3,0,0,-1,0,0,0
+1,46,48,45,4,0,0,22,0,0,0,-1--1--1,,1|(905,464)|
+1,47,48,35,100,0,0,22,0,0,0,-1--1--1,,1|(842,464)|
+11,48,48,874,464,6,8,34,3,0,0,1,0,0,0
+10,49,Tier 2 Client Turnover,874,480,56,8,40,3,0,0,-1,0,0,0
+10,50,Tier 2 Referrals,507,418,27,15,8,131,0,0,0,0,0,0
+1,51,50,43,1,0,0,0,0,64,0,-1--1--1,,1|(443,421)|
+1,52,34,39,1,0,0,0,0,64,0,-1--1--1,,1|(568,498)|
+1,53,35,49,1,0,0,0,0,64,0,-1--1--1,,1|(837,505)|
+10,54,Referrals from Tier 2 Clients,695,392,49,14,8,3,0,0,0,0,0,0
+1,55,54,50,0,0,0,0,0,64,0,-1--1--1,,1|(596,405)|
+1,56,35,54,1,0,0,0,0,64,0,-1--1--1,,1|(741,413)|
+12,57,48,514,566,10,8,0,3,0,0,-1,0,0,0
+1,58,60,57,4,0,0,22,0,0,0,-1--1--1,,1|(513,545)|
+1,59,60,34,100,0,0,22,0,0,0,-1--1--1,,1|(513,503)|
+11,60,48,513,526,8,6,33,3,0,0,2,0,0,0
+10,61,Tier 2 Leads Going Stale,473,526,32,14,40,3,0,0,-1,0,0,0
+1,62,34,60,1,0,0,0,0,64,0,-1--1--1,,1|(532,497)|
+10,63,Up referral fraction,1077,248,49,8,8,131,0,0,0,0,0,0
+10,64,Tier 2 Referrals from Tier 1,483,613,41,14,8,3,0,0,0,0,0,0
+1,65,21,64,0,0,0,0,0,64,0,-1--1--1,,1|(590,629)|
+1,66,64,44,1,0,0,0,0,64,0,-1--1--1,,1|(418,576)|
+10,67,Up referral fraction,384,343,40,14,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,68,Down referral fraction,1083,346,56,8,8,131,0,0,0,0,0,0
+10,69,Tier 3 Referrals from Tier 2,507,340,41,14,8,3,0,0,0,0,0,0
+10,70,Tier 1 Referrals from Tier 2,505,381,40,17,8,131,0,0,0,0,0,0
+1,71,54,70,0,0,0,0,0,64,0,-1--1--1,,1|(602,386)|
+1,72,54,69,0,0,0,0,0,64,0,-1--1--1,,1|(603,366)|
+1,73,70,10,1,0,0,0,0,64,0,-1--1--1,,1|(283,494)|
+1,74,67,69,0,0,0,0,0,64,0,-1--1--1,,1|(438,342)|
+10,75,Flat referral fraction,1169,304,51,8,8,3,0,0,0,0,0,0
+10,76,Flat referral fraction,627,428,58,8,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,77,76,50,0,0,0,0,0,64,0,-1--1--1,,1|(558,422)|
+10,78,Minimum Time to Make a Sale,613,540,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,79,Effort Required to Make a Sale,753,524,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,80,78,39,0,0,0,0,0,64,0,-1--1--1,,1|(624,513)|
+1,81,79,39,0,0,0,0,0,64,0,-1--1--1,,1|(694,501)|
+10,82,Tier 3 Leads,514,200,51,22,3,131,0,0,0,0,0,0
+10,83,Tier 3 Clients,765,200,52,23,3,131,0,0,0,0,0,0
+1,84,86,83,4,0,0,22,0,0,0,-1--1--1,,1|(679,200)|
+1,85,86,82,100,0,0,22,0,0,0,-1--1--1,,1|(599,200)|
+11,86,924,640,200,6,8,34,3,0,0,1,0,0,0
+10,87,Tier 3 Sales,640,216,31,8,40,3,0,0,-1,0,0,0
+12,88,48,356,201,10,8,0,3,0,0,-1,0,0,0
+1,89,91,82,4,0,0,22,0,0,0,-1--1--1,,1|(436,201)|
+1,90,91,88,100,0,0,22,0,0,0,-1--1--1,,1|(381,201)|
+11,91,48,403,201,6,8,34,3,0,0,1,0,0,0
+10,92,Tier 3 Lead Aquisition,403,217,57,8,40,3,0,0,-1,0,0,0
+12,93,48,942,200,10,8,0,3,0,0,-1,0,0,0
+1,94,96,93,4,0,0,22,0,0,0,-1--1--1,,1|(906,200)|
+1,95,96,83,100,0,0,22,0,0,0,-1--1--1,,1|(843,200)|
+11,96,48,875,200,6,8,34,3,0,0,1,0,0,0
+10,97,Tier 3 Client Turnover,875,216,56,8,40,3,0,0,-1,0,0,0
+10,98,Tier 3 Referrals,508,154,40,8,8,131,0,0,0,0,0,0
+1,99,98,91,1,0,0,0,0,64,0,-1--1--1,,1|(441,170)|
+1,100,82,87,1,0,0,0,0,64,0,-1--1--1,,1|(569,234)|
+1,101,83,97,1,0,0,0,0,64,0,-1--1--1,,1|(838,241)|
+10,102,Referrals from Tier 3 Clients,696,128,49,14,8,3,0,0,0,0,0,0
+1,103,102,98,0,0,0,0,0,64,0,-1--1--1,,1|(604,140)|
+1,104,83,102,1,0,0,0,0,64,0,-1--1--1,,1|(742,149)|
+12,105,48,515,302,10,8,0,3,0,0,-1,0,0,0
+1,106,108,105,4,0,0,22,0,0,0,-1--1--1,,1|(514,281)|
+1,107,108,82,100,0,0,22,0,0,0,-1--1--1,,1|(514,239)|
+11,108,48,514,262,8,6,33,3,0,0,2,0,0,0
+10,109,Tier 3 Leads Going Stale,474,262,32,14,40,3,0,0,-1,0,0,0
+1,110,82,108,1,0,0,0,0,64,0,-1--1--1,,1|(533,233)|
+10,111,Tier 2 Referrals from Tier 3,506,117,41,14,8,131,0,0,0,0,0,0
+1,112,102,111,0,0,0,0,0,64,0,-1--1--1,,1|(603,122)|
+10,113,Minimum Time to Make a Sale,604,271,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,114,Effort Required to Make a Sale,749,258,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,115,113,87,0,0,0,0,0,64,0,-1--1--1,,1|(619,246)|
+1,116,114,87,0,0,0,0,0,64,0,-1--1--1,,1|(693,236)|
+10,117,Up referral fraction,370,639,56,8,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,118,117,17,0,0,0,0,0,64,0,-1--1--1,,1|(419,649)|
+1,119,117,64,0,0,0,0,0,64,0,-1--1--1,,1|(416,628)|
+10,120,Down referral fraction,395,417,40,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,121,120,70,0,0,0,0,0,64,0,-1--1--1,,1|(443,401)|
+1,122,69,92,1,0,0,0,0,64,0,-1--1--1,,1|(419,291)|
+1,123,111,43,1,0,0,0,0,64,0,-1--1--1,,1|(292,200)|
+10,124,Down referral fraction,382,159,40,14,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,125,124,111,0,0,0,0,0,64,0,-1--1--1,,1|(436,140)|
+1,126,124,98,0,0,0,0,0,64,0,-1--1--1,,1|(438,156)|
+1,127,63,75,0,0,0,0,0,64,0,-1--1--1,,1|(1116,272)|
+1,128,68,75,0,0,0,0,0,64,0,-1--1--1,,1|(1119,328)|
+10,129,Minimum Time to Make a Sale,590,792,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,130,Effort Devoted to Tier 1 Leads,658,843,48,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,131,Effort Required to Make a Sale,749,785,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,132,129,6,0,0,0,0,0,64,0,-1--1--1,,1|(610,764)|
+1,133,130,6,0,0,0,0,0,64,0,-1--1--1,,1|(647,791)|
+1,134,131,6,0,0,0,0,0,64,0,-1--1--1,,1|(692,758)|
+10,135,Effort Devoted to Tier 2 Leads,687,573,48,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,136,Effort Devoted to Tier 3 Leads,670,308,48,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,137,135,39,0,0,0,0,0,64,0,-1--1--1,,1|(664,529)|
+1,138,136,87,0,0,0,0,0,64,0,-1--1--1,,1|(656,265)|
+10,139,Referrals per meeting,844,646,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,140,Frequency of Meetings,844,591,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,141,140,21,0,0,0,0,0,64,0,-1--1--1,,1|(776,614)|
+1,142,139,21,0,0,0,0,0,64,0,-1--1--1,,1|(780,645)|
+10,143,Frequency of Meetings,844,347,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,144,Frequency of Meetings,844,91,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,145,Referrals per meeting,844,146,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,146,Referrals per meeting,844,398,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,147,144,102,0,0,0,0,0,64,0,-1--1--1,,1|(782,105)|
+1,148,145,102,0,0,0,0,0,64,0,-1--1--1,,1|(782,138)|
+1,149,143,54,0,0,0,0,0,64,0,-1--1--1,,1|(780,365)|
+1,150,146,54,0,0,0,0,0,64,0,-1--1--1,,1|(782,395)|
+10,151,Lead Shelf Life,1241,517,40,8,8,3,0,0,0,0,0,0
+10,152,Lead Shelf Life,576,834,38,15,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,153,Lead Shelf Life,575,584,36,16,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,154,Lead Shelf Life,578,312,36,18,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,155,154,108,0,0,0,0,0,64,0,-1--1--1,,1|(543,285)|
+1,156,153,60,0,0,0,0,0,64,0,-1--1--1,,1|(543,554)|
+1,157,152,29,0,0,0,0,0,64,0,-1--1--1,,1|(543,805)|
+10,158,Client Lifetime,1241,578,39,8,8,3,0,0,0,0,0,0
+10,159,Client Lifetime,912,772,46,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,160,Client Lifetime,913,524,46,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,161,Client Lifetime,924,264,46,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,162,161,97,0,0,0,0,0,64,0,-1--1--1,,1|(904,244)|
+1,163,160,49,0,0,0,0,0,64,0,-1--1--1,,1|(898,507)|
+1,164,159,16,0,0,0,0,0,64,0,-1--1--1,,1|(896,756)|
+10,165,Success Rate,1089,640,34,8,8,3,0,0,0,0,0,0
+10,166,Success Rate,737,289,41,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,167,Success Rate,741,551,41,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,168,Success Rate,712,815,41,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,169,168,6,0,0,0,0,0,64,0,-1--1--1,,1|(678,778)|
+1,170,167,39,0,0,0,0,0,64,0,-1--1--1,,1|(695,519)|
+1,171,166,87,0,0,0,0,0,64,0,-1--1--1,,1|(694,256)|
+10,172,Qualification Rate,1241,640,46,8,8,3,0,0,0,0,0,0
+10,173,Qualification Rate,331,266,39,13,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,174,Qualification Rate,330,539,40,16,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,175,Qualification Rate,359,796,38,16,8,130,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,176,175,11,0,0,0,0,0,64,0,-1--1--1,,1|(373,766)|
+1,177,174,44,0,0,0,0,0,64,0,-1--1--1,,1|(365,510)|
+1,178,173,92,0,0,0,0,0,64,0,-1--1--1,,1|(364,242)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Effort Prioritization
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|72,72,5,0
+10,1,Effort Devoted to Tier 1 Leads,1047,651,45,14,8,3,0,0,0,0,0,0
+10,2,Effort Devoted to Tier 2 Leads,1195,486,45,14,8,3,0,0,0,0,0,0
+10,3,Effort Devoted to Tier 3 Leads,1189,365,45,14,8,3,0,0,0,0,0,0
+10,4,Sales Effort Available,1047,202,34,14,8,130,0,3,0,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,5,Tier 2 Leads,1155,422,39,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,6,Tier 3 Leads,1139,289,39,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,7,Tier 2 Clients,732,364,42,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,8,Tier 1 Clients,732,513,42,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,9,Tier 3 Clients,732,217,42,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,10,Frequency of Meetings,732,170,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,11,Time per Client Meeting,732,117,44,14,8,2,0,3,0,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,12,Effort Devoted to Tier 3 Clients,867,170,45,14,8,3,0,0,0,0,0,0
+1,13,9,12,0,0,0,0,0,64,0,-1--1--1,,1|(783,198)|
+1,14,11,12,0,0,0,0,0,64,0,-1--1--1,,1|(792,140)|
+10,15,Effort Devoted to Tier 2 Clients,867,317,45,14,8,3,0,0,0,0,0,0
+10,16,Effort Devoted to Tier 1 Clients,867,464,45,14,8,3,0,0,0,0,0,0
+10,17,Time per Client Meeting,732,264,44,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,18,Time per Client Meeting,732,411,44,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,19,17,15,0,0,0,0,0,64,0,-1--1--1,,1|(792,287)|
+1,20,7,15,0,0,0,0,0,64,0,-1--1--1,,1|(783,345)|
+1,21,18,16,0,0,0,0,0,64,0,-1--1--1,,1|(792,434)|
+1,22,8,16,0,0,0,0,0,64,0,-1--1--1,,1|(784,494)|
+10,23,Frequency of Meetings,732,317,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,24,Frequency of Meetings,732,464,37,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,25,24,16,0,0,0,0,0,64,0,-1--1--1,,1|(788,464)|
+1,26,23,15,0,0,0,0,0,64,0,-1--1--1,,1|(788,317)|
+1,27,10,12,0,0,0,0,0,64,0,-1--1--1,,1|(788,170)|
+10,28,Time per Client Meeting,573,341,41,14,8,3,0,0,-1,0,0,0
+10,29,Effort Remaining after Servicing Existing Clients,1047,319,53,24,8,131,0,0,0,0,0,0
+1,30,12,29,0,0,0,0,0,64,0,-1--1--1,,1|(945,235)|
+1,31,15,29,0,0,0,0,0,64,0,-1--1--1,,1|(946,317)|
+1,32,16,29,0,0,0,0,0,64,0,-1--1--1,,1|(945,400)|
+1,33,4,29,0,0,0,0,0,64,0,-1--1--1,,1|(1047,248)|
+10,34,Effort Required to Make a Sale,1251,293,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,35,6,3,0,0,0,0,0,64,0,-1--1--1,,1|(1157,318)|
+1,36,34,3,0,0,0,0,0,64,0,-1--1--1,,1|(1224,323)|
+1,37,29,3,0,0,0,0,0,64,0,-1--1--1,,1|(1115,341)|
+10,38,Effort Remaining after Servicing Tier 3 Leads,1047,436,58,14,8,3,0,0,0,0,0,0
+1,39,29,38,0,0,0,0,0,64,0,-1--1--1,,1|(1047,375)|
+1,40,3,38,0,0,0,0,0,64,0,-1--1--1,,1|(1124,396)|
+10,41,Effort Required to Make a Sale,1254,422,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,42,5,2,0,0,0,0,0,64,0,-1--1--1,,1|(1169,445)|
+1,43,41,2,0,0,0,0,0,64,0,-1--1--1,,1|(1229,448)|
+10,44,Effort Remaining after Servicing Tier 2 Leads,1047,543,58,14,8,3,0,0,0,0,0,0
+1,45,38,44,0,0,0,0,0,64,0,-1--1--1,,1|(1047,482)|
+1,46,2,44,0,0,0,0,0,64,0,-1--1--1,,1|(1127,512)|
+1,47,38,2,0,0,0,0,0,64,0,-1--1--1,,1|(1113,458)|
+1,48,44,1,0,0,0,0,0,64,0,-1--1--1,,1|(1047,590)|
+10,49,Sales Effort Available,573,264,55,8,8,3,0,0,-1,0,0,0
+10,50,Fraction of Effort for Sales,624,208,45,14,8,3,0,0,0,0,0,0
+1,51,50,49,0,0,0,0,0,64,0,-1--1--1,,1|(600,233)|
+10,52,Total Effort Available,517,208,35,18,8,131,0,0,0,0,0,0
+1,53,52,49,0,0,0,0,0,64,0,-1--1--1,,1|(545,236)|
+10,54,Still Employed,567,173,45,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,55,54,49,0,0,0,0,0,64,0,-1--1--1,,1|(569,211)|
+10,56,Minimum Time to Make a Sale,1328,365,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,57,Minimum Time to Make a Sale,1328,486,50,14,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,58,56,3,0,0,0,0,0,64,0,-1--1--1,,1|(1263,365)|
+1,59,57,2,0,0,0,0,0,64,0,-1--1--1,,1|(1266,486)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Financials
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|72,72,5,0
+10,1,Tier 1 Sales,326,187,37,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,2,Tier 2 Sales,326,281,37,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,3,Tier 3 Sales,326,375,37,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,4,Months of Expenses per Tier 2 Sale,326,234,52,14,8,3,0,0,0,0,0,0
+10,5,Months of Expenses per Tier 1 Sale,326,140,52,14,8,3,0,0,0,0,0,0
+10,6,Months of Expenses per Tier 3 Sale,326,328,52,14,8,3,0,0,0,0,0,0
+10,7,Months of Buffer,694,257,40,20,3,3,0,0,0,0,0,0
+12,8,48,538,254,10,8,0,3,0,0,-1,0,0,0
+1,9,11,7,4,0,0,22,0,0,0,-1--1--1,,1|(630,254)|
+1,10,11,8,100,0,0,22,0,0,0,-1--1--1,,1|(571,254)|
+11,11,48,601,254,6,8,34,3,0,0,1,0,0,0
+10,12,Income,601,270,20,8,40,3,0,0,-1,0,0,0
+12,13,48,856,256,10,8,0,3,0,0,-1,0,0,0
+1,14,16,13,4,0,0,22,0,0,0,-1--1--1,,1|(821,256)|
+1,15,16,7,100,0,0,22,0,0,0,-1--1--1,,1|(759,256)|
+11,16,48,790,256,6,8,34,3,0,0,1,0,0,0
+10,17,Expenses,790,272,25,8,40,3,0,0,-1,0,0,0
+10,18,Tier 1 Income,454,159,36,8,8,3,0,0,0,0,0,0
+10,19,Tier 2 Income,454,255,36,8,8,3,0,0,0,0,0,0
+10,20,Tier 3 Income,454,351,36,8,8,3,0,0,0,0,0,0
+1,21,18,11,1,0,0,0,0,64,0,-1--1--1,,1|(545,178)|
+1,22,19,11,1,0,0,0,0,64,0,-1--1--1,,1|(526,232)|
+1,23,20,12,1,0,0,0,0,64,0,-1--1--1,,1|(545,334)|
+1,24,5,18,0,0,0,0,0,64,0,-1--1--1,,1|(391,148)|
+1,25,1,18,0,0,0,0,0,64,0,-1--1--1,,1|(383,174)|
+1,26,4,19,0,0,0,0,0,64,0,-1--1--1,,1|(391,244)|
+1,27,2,19,0,0,0,0,0,64,0,-1--1--1,,1|(383,269)|
+1,28,6,20,0,0,0,0,0,64,0,-1--1--1,,1|(391,339)|
+1,29,3,20,0,0,0,0,0,64,0,-1--1--1,,1|(383,364)|
+10,30,Startup Subsidy,655,180,40,8,8,3,0,0,0,0,0,0
+1,31,30,11,0,0,0,0,0,64,0,-1--1--1,,1|(631,212)|
+10,32,Startup Subsidy Length,664,335,59,8,8,3,0,0,0,0,0,0
+1,33,32,12,0,0,0,0,0,64,0,-1--1--1,,1|(637,307)|
+10,34,Time,527,294,21,8,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,35,34,12,0,0,0,0,0,64,0,-1--1--1,,1|(557,284)|
+10,36,Still Employed,791,316,38,8,8,3,0,0,0,0,0,0
+1,37,7,36,0,0,0,0,0,64,0,-1--1--1,,1|(745,288)|
+10,38,Initial Buffer,694,227,34,8,8,3,0,0,0,0,0,0
+1,39,38,7,0,0,0,0,0,64,1,-1--1--1,,1|(694,229)|
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*Dashboard
+$192-192-192,0,Times New Roman|12||0-0-0|0-0-0|0-0-255|-1--1--1|-1--1--1|72,72,5,0
+10,1,Startup Subsidy,174,153,40,8,8,3,0,0,-1,0,0,0
+10,2,Startup Subsidy Length,174,200,59,8,8,3,0,0,-1,0,0,0
+12,3,42065392,862,84,173,98,3,188,0,0,2,0,0,0
+Months of Buffer,Graph
+10,4,Effort Required to Make a Sale,367,153,47,14,8,3,0,0,-1,0,0,0
+10,5,Minimum Time to Make a Sale,367,200,47,14,8,3,0,0,-1,0,0,0
+10,6,Referrals per meeting,560,153,54,8,8,3,0,0,-1,0,0,0
+10,7,Client Lifetime,560,200,39,8,8,3,0,0,-1,0,0,0
+12,8,42065396,866,278,177,88,3,188,0,0,1,0,0,0
+Effort
+12,9,42065400,861,483,171,98,3,188,0,0,1,0,0,0
+Sales
+12,10,42065404,330,321,210,72,3,188,0,0,2,0,0,0
+Still Employed,Graph
+10,11,Success Rate,358,85,34,8,8,3,0,0,-1,0,0,0
+10,12,Total Effort Available,191,80,54,8,8,3,0,0,-1,0,0,0
+///---\\\
+:GRAPH Sales
+:TITLE Sales
+:X-AXIS Time
+:SCALE
+:VAR Tier 1 Sales
+:SCALE
+:VAR Tier 2 Sales
+:SCALE
+:VAR Tier 3 Sales
+
+:GRAPH Effort
+:TITLE Effort Allocation
+:X-AXIS Time
+:STACK 0
+:SOFT-BOUNDS
+:SCALE
+:VAR Effort Devoted to Tier 1 Clients
+:SCALE
+:VAR Effort Devoted to Tier 2 Clients
+:SCALE
+:VAR Effort Devoted to Tier 3 Clients
+:SCALE
+:VAR Effort Devoted to Tier 1 Leads
+:SCALE
+:VAR Effort Devoted to Tier 2 Leads
+:SCALE
+:VAR Effort Devoted to Tier 3 Leads
+:L<%^E!@
+1:Current.vdf
+9:Current
+22:$,Dollar,Dollars,$s
+22:Day,Days
+22:Hour,Hours
+22:Meeting,Meetings
+22:Month,Months
+22:Person,People,Persons
+22:Referral,Referrals
+22:Unit,Units
+22:Week,Weeks
+22:Year,Years
+15:0,0,0,0,0,0
+19:5,0
+27:2,
+34:0,
+4:Time
+5:Months of Buffer
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:2
+41:0
+42:1
+24:2.375
+25:16.875
+26:120
